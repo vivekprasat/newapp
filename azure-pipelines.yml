@@ -18,9 +18,9 @@ stages:
   - job: MavenPackageAndPublishArtifacts
     displayName: Maven Package and Publish Artifacts
     pool:
-      name: Default
+      name: my agent
       demands:
-        - agent.name -equals vivek
+        - agent.name -equals vivek007
 
     steps:
     - script: |
