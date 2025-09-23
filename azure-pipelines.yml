@@ -18,7 +18,7 @@ stages:
   - job: MavenPackageAndPublishArtifacts
     displayName: Maven Package and Publish Artifacts
     pool:
-      name: my agent   # <-- ensure this matches your actual agent pool name
+      name: Default
     steps:
     - task: Maven@4
       displayName: 'Maven Package'
@@ -53,9 +53,9 @@ stages:
     displayName: Deploy Linux Web App
     environment: $(environmentName)
     pool:
-      name: my agent   # must match agent pool name
+      name: Default
       demands:
-        - agent.name -equals vivek007
+        - agent.name -equals vivek
 
     strategy:
       runOnce:
