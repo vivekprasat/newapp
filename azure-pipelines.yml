@@ -70,4 +70,5 @@ stages:
               azureSubscription: $(azureSubscription)
               appType: webAppLinux
               appName: $(webAppName)
-              package: '$(Pipeline.Workspace)/drop/**/*.war'
+              package: '$(Pipeline.Workspace)/drop/**/*.*ar'  # matches .war or .jar
+
