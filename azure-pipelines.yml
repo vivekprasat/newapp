@@ -2,8 +2,8 @@ trigger:
 - main
 
 variables:
-  # Azure Resource Manager connection created during pipeline creation
-  azureSubscription: '64c63129-362c-4c19-8e2e-2f9ce52f6d73'
+  # Azure Resource Manager connection (use Service Connection name, not GUID)
+  azureSubscription: azuredevops
 
   # Web app name
   webAppName: 'storageapp'
@@ -18,7 +18,7 @@ stages:
   - job: MavenPackageAndPublishArtifacts
     displayName: Maven Package and Publish Artifacts
     pool:
-      name: my agent
+      name: my agent   # <-- ensure this matches your actual agent pool name
     steps:
     - task: Maven@4
       displayName: 'Maven Package'
@@ -35,8 +35,10 @@ stages:
       displayName: 'Copy Files to artifact staging directory'
       inputs:
         SourceFolder: '$(System.DefaultWorkingDirectory)'
-        Contents: '**/target/*.?(war|jar)'
-        TargetFolder: $(Build.ArtifactStagingDirectory)
+        Contents: |
+          **/target/*.war
+          **/target/*.jar
+        TargetFolder: '$(Build.ArtifactStagingDirectory)'
 
     - upload: $(Build.ArtifactStagingDirectory)
       artifact: drop
@@ -51,9 +53,9 @@ stages:
     displayName: Deploy Linux Web App
     environment: $(environmentName)
     pool:
-      name: Default
+      name: my agent   # must match agent pool name
       demands:
-        - agent.name -equals vivek
+        - agent.name -equals vivek007
 
     strategy:
       runOnce:
@@ -65,4 +67,4 @@ stages:
               azureSubscription: $(azureSubscription)
               appType: webAppLinux
               appName: $(webAppName)
-              package: '$(Pipeline.Workspace)/drop/**/target/*.?(war|jar)'
+              package: '$(Pipeline.Workspace)/drop/**/target/*.war'
