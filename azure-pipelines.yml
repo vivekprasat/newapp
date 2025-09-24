@@ -52,7 +52,7 @@ stages:
     displayName: Deploy Linux Web App
     environment: $(environmentName)
     pool:
-      name: Default
+      name: my agent
       # demands:
       #   - agent.name -equals 'vivek'
     strategy:
