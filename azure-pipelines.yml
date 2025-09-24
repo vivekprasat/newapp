@@ -13,7 +13,7 @@ stages:
   - job: MavenPackageAndPublishArtifacts
     displayName: Maven Package and Publish Artifacts
     pool:
-      name: my agent
+      name: Default
       # demands:
       #   - agent.name -equals 'vivek'
     steps:
@@ -52,7 +52,7 @@ stages:
     displayName: Deploy Linux Web App
     environment: $(environmentName)
     pool:
-      name: my agent
+      name: Default
       # demands:
       #   - agent.name -equals 'vivek'
     strategy:
