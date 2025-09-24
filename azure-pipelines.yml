@@ -13,9 +13,9 @@ stages:
   - job: MavenPackageAndPublishArtifacts
     displayName: Maven Package and Publish Artifacts
     pool:
-      name: Default
-      demands:
-        - agent.name -equals 'vivek'
+      name: my agent
+      # demands:
+      #   - agent.name -equals 'vivek'
     steps:
     - task: Maven@4
       displayName: 'Maven Package'
@@ -53,8 +53,8 @@ stages:
     environment: $(environmentName)
     pool:
       name: Default
-      demands:
-        - agent.name -equals 'vivek'
+      # demands:
+      #   - agent.name -equals 'vivek'
     strategy:
       runOnce:
         deploy:
