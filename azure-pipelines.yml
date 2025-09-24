@@ -2,13 +2,8 @@ trigger:
 - main
 
 variables:
-  # Azure Resource Manager connection (use Service Connection name, not GUID)
   azureSubscription: azuredevops
-
-  # Web app name
   webAppName: 'storageapp'
-
-  # Environment name
   environmentName: 'storageapp'
 
 stages:
@@ -19,9 +14,8 @@ stages:
     displayName: Maven Package and Publish Artifacts
     pool:
       name: Default
-      demands:          # fixed indentation and syntax
+      demands:
         - agent.name -equals 'vivek'
-
     steps:
     - task: Maven@4
       displayName: 'Maven Package'
@@ -43,7 +37,7 @@ stages:
           **/target/*.jar
         TargetFolder: '$(Build.ArtifactStagingDirectory)'
 
-    - task: PublishBuildArtifacts@1     # fixed: use proper task
+    - task: PublishBuildArtifacts@1
       inputs:
         PathtoPublish: '$(Build.ArtifactStagingDirectory)'
         ArtifactName: 'drop'
@@ -53,7 +47,6 @@ stages:
   displayName: Deploy stage
   dependsOn: Build
   condition: succeeded()
-  
   jobs:
   - deployment: DeployLinuxWebApp
     displayName: Deploy Linux Web App
@@ -62,18 +55,28 @@ stages:
       name: Default
       demands:
         - agent.name -equals 'vivek'
-
     strategy:
       runOnce:
         deploy:
           steps:
-          - download: current
-            artifact: drop
-
-          - task: AzureWebApp@1
-            displayName: 'Azure Web App Deploy: storageapp'
-            inputs:
-              azureSubscription: $(azureSubscription)
-              appType: webAppLinux
-              appName: $(webAppName)
-              package: '$(Pipeline.Workspace)/drop/**/*.*ar'  # matches .war or .jar
+            - task: DownloadBuildArtifacts@1
+              inputs:
+                buildType: 'current'
+                downloadType: 'specific'
+                downloadPath: '$(System.ArtifactsDirectory)'
+                cleanDestinationFolder: true
+            - task: AzureRmWebAppDeployment@5
+              inputs:
+                ConnectionType: 'AzureRM'
+                azureSubscription: 'azuredevops'
+                appType: 'webAppLinux'
+                WebAppName: 'storageapp'
+                packageForLinux: '$(System.ArtifactsDirectory)/**/*.jar'
+                DeploymentTypeLinux: 'oneDeploy'
+          # - task: AzureWebApp@1
+          #   displayName: 'Azure Web App Deploy: storageapp'
+          #   inputs:
+          #     azureSubscription: $(azureSubscription)
+          #     appType: webAppLinux
+          #     appName: $(webAppName)
+          #     package: '$(Pipeline.Workspace)/drop/**/*.*ar'
