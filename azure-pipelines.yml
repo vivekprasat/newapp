@@ -65,15 +65,20 @@ stages:
           #       downloadType: 'specific'
           #       downloadPath: '$(System.ArtifactsDirectory)'
           #       cleanDestinationFolder: true
-
-            - task: AzureRmWebAppDeployment@5
+            - task: AzureWebApp@1
               inputs:
-                ConnectionType: 'AzureRM'
                 azureSubscription: 'azuredevops'
                 appType: 'webAppLinux'
-                WebAppName: 'storageapp'
-                packageForLinux: '$(Pipeline.Workspace)/drop/**/*.*ar'
-                DeploymentTypeLinux: 'oneDeploy'
+                appName: 'storageapp'
+                package: '$(Pipeline.Workspace)/drop/**/*.*ar'
+            # - task: AzureRmWebAppDeployment@5
+            #   inputs:
+            #     ConnectionType: 'AzureRM'
+            #     azureSubscription: 'azuredevops'
+            #     appType: 'webAppLinux'
+            #     WebAppName: 'storageapp'
+            #     packageForLinux: '$(Pipeline.Workspace)/drop/**/*.*ar'
+            #     DeploymentTypeLinux: 'oneDeploy'
           # - task: AzureWebApp@1
           #   displayName: 'Azure Web App Deploy: storageapp'
           #   inputs:
