@@ -72,7 +72,7 @@ stages:
                 azureSubscription: 'azuredevops'
                 appType: 'webAppLinux'
                 WebAppName: 'storageapp'
-                packageForLinux: '$(System.DefaultWorkingDirectory)/**/*.jar'
+                packageForLinux: '$(Pipeline.Workspace)/drop/**/*.*ar'
                 DeploymentTypeLinux: 'oneDeploy'
           # - task: AzureWebApp@1
           #   displayName: 'Azure Web App Deploy: storageapp'
