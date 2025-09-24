@@ -65,13 +65,14 @@ stages:
           #       downloadType: 'specific'
           #       downloadPath: '$(System.ArtifactsDirectory)'
           #       cleanDestinationFolder: true
+
             - task: AzureRmWebAppDeployment@5
               inputs:
                 ConnectionType: 'AzureRM'
                 azureSubscription: 'azuredevops'
                 appType: 'webAppLinux'
                 WebAppName: 'storageapp'
-                packageForLinux: '$(System.ArtifactsDirectory)/**/*.jar'
+                packageForLinux: '$(System.DefaultWorkingDirectory)/**/*.jar'
                 DeploymentTypeLinux: 'oneDeploy'
           # - task: AzureWebApp@1
           #   displayName: 'Azure Web App Deploy: storageapp'
